@@ -1,0 +1,3 @@
+g++ -std=c++17 -O3 test_aton.cc -o aton_test
+g++ -std=c++17 -O3 test_ntoa.cc -o ntoa_test
+g++ -std=c++17 -O3 perf_test_aton.cc -o aton_perf_test

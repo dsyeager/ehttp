@@ -1,0 +1,1 @@
+g++ -pthread -std=c++17 -g aton.cc -o go
