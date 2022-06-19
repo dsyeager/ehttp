@@ -60,6 +60,7 @@ bool check_stdin()
 void process_reqs(void *) // ingnore the arg
 {
         auto tid = std::this_thread::get_id();
+
         while (true)
         {
                 const server *srv = s_servers.get_server();
@@ -79,6 +80,7 @@ void process_reqs(void *) // ingnore the arg
                 }
                 //usleep(10);
         }
+        cout << "thread exiting" << endl;
 }
 
 std::pair<string_view, string_view> split(string_view str, char delim)
@@ -155,11 +157,25 @@ int main(int argc, char** argv)
 
         s_servers.resolve_addrs();
 
+        cout << "servers resolved, ready to start processing requests" << endl;
+
+        // ready to start the threads processing the requests
+
+
+
+
+
+
+
+
         while (tpool.active_cnt())
         {
                 cout << "active threads: " << tpool.active_cnt() << ", server waiters: " << s_servers.waiter_cnt() << endl;
                 tpool.wait_for(1000);
         }
+
+        // all requests are processed, do some cleanup
+
         add_time("servers processed"sv);
         s_servers.persist_servers("dns.cached");
         add_time("dns cached"sv);
