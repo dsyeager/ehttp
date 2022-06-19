@@ -96,7 +96,7 @@ int main(int argc, char** argv)
         std::cout << std::fixed << std::setprecision(3);
         uint64_t start = get_nanoseconds();
         add_time("start"sv);
-        const uint32_t thread_cnt = 5;
+        const uint32_t thread_cnt = 1;
         thread_pool tpool(thread_cnt);
         tpool.start_n(process_reqs, nullptr, thread_cnt);
         uint16_t port = 10091;

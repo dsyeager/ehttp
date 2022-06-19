@@ -165,15 +165,15 @@ could:
                 while (m_servers_resolved.empty() && (m_servers_processed.empty() || m_servers_processed.size() != m_servers.size()))
                 {
                         // might want an m_run var for early termination
-                        //std::cout << "waiting, thread: " << std::this_thread::get_id() << std::endl;
+                        std::cout << "waiting, thread: " << std::this_thread::get_id() << std::endl;
                         m_waiters++;
                         auto ret = m_cond.wait_for(alock, 100ms);
                         m_waiters--;
                         if (std::cv_status::timeout == ret)
                         {
-                                //std::cout << "cond wait timed out" << std::endl;
+                                std::cout << "cond wait timed out" << std::endl;
                         }
-                        //std::cout << "woke up, thread: " << std::this_thread::get_id() << std::endl;
+                        std::cout << "woke up, thread: " << std::this_thread::get_id() << std::endl;
                 }
 
                 server* ret = nullptr;
@@ -224,6 +224,7 @@ could:
 
         void unpersist_servers(const char* fpath)
         {
+fprintf(stderr, "unpersisting '%s'\n", fpath);
                 if (!from_file(m_dns_data, fpath))
                 {
                         return;
@@ -253,7 +254,8 @@ could:
                         if (m_servers_resolved.size() == start_cnt)
                                 usleep(10000);
                 }
-                std::cout << "resolve_addrs, loops: " << loops << std::endl;
+                std::cout << "resolve_addrs, loops: " << loops 
+                          << ", servers resolved: " << m_servers_resolved.size() << std::endl;
                 return true;
         }
 
