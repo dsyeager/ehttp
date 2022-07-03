@@ -1,4 +1,5 @@
 #include "get_nanoseconds.h"
+#include "requests.h"
 #include "servers.h"
 #include "thread_pool.h"
 
@@ -14,6 +15,7 @@
 using namespace std;
 
 servers s_servers;
+std::string s_url("/index.html");
 
 std::mutex s_mutex;
 
@@ -60,9 +62,16 @@ bool check_stdin()
 void process_reqs(void *) // ingnore the arg
 {
         auto tid = std::this_thread::get_id();
+        requests reqs;
 
         while (true)
         {
+		if (reqs.get_req_cnt() >= 10)
+		{
+			reqs.process();
+			continue;
+		}
+
                 const server *srv = s_servers.get_server();
 
                 if (!srv)
@@ -78,8 +87,19 @@ void process_reqs(void *) // ingnore the arg
                              << endl;
                         srv->print_ips();
                 }
+
+                if (!reqs.add_request(srv, 80, s_url))
+		{
+			std::cerr << "add_request failed" << std::endl;
+		}
                 //usleep(10);
         }
+
+	if (reqs.get_req_cnt())
+	{
+		reqs.process();
+	}
+
         cout << "thread exiting" << endl;
 }
 

@@ -103,6 +103,29 @@ public:
                 set_end_dns(get_nanoseconds());
                 return !m_addrs.empty();
         }
+	
+        int non_blocking_connect() const
+        {
+		int fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+		int failures = 0;
+
+		for (addrinfo *pai : m_addrs)
+		{
+			sockaddr *addr = pai->ai_addr;
+
+			int res = connect(fd, (struct sockaddr*)pai->ai_addr, sizeof(*pai->ai_addr));
+			if (!res || errno == EINPROGRESS)
+			{
+				return fd;
+			}
+			std::cerr << "connect failed, res: " << res 
+                                  << ", fd: " << fd 
+                                  << ", error: " << strerror(errno) << std::endl;
+			++failures;
+                }
+
+		return -1;
+        }
 
         dns_query *dns_qry = nullptr; // public for now
 private:
