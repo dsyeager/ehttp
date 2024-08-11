@@ -1,1 +1,0 @@
-g++ -pthread -std=c++17 -g -O3 ehttp.cc -ludns -o ehttp
