@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include "log.h"
 
 class event
 {
@@ -42,7 +42,7 @@ class event
     {
         if (-1 == m_fd)
         {
-            std::cerr << "event::process called but m_fd is -1" << std::endl;
+            ERROR << "event::process called but m_fd is -1" << ENDL;
         } 
         else
         {
@@ -56,13 +56,15 @@ class event
     {
         int sock_err = 0;
         socklen_t elen = sizeof(sock_err);
-        std::cerr << "event_set_failed, " << err 
         
         if (setsockopt(m_fd, SOL_SOCKET, SO_ERROR, (void *)&sock_err, &elen) == 0)
         {
-            std::cerr << " (" << strerror(sock_err) << ')'; 
+            ERROR << "event_set_failed, " << err << ", (" << strerror(sock_err) << ')' << ENDL; 
         }
-        std::cerr << std::endl;
+        else
+        {
+            ERROR << "event_set_failed, " << err << ", (no socket error)" << ENDL; 
+        }
     }
 
     bool is_in_queue() const { return m_is_in_queue; }
