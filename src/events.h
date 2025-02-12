@@ -2,6 +2,13 @@
 
 #include "log.h"
 
+/**
+  Not currently used.
+  Don't remember when I wrote this.
+  Ideally it would be used from either the requests or request class but that means that the cb function would need to be a pointer to a member function
+  Don't know if it is really needed.
+  */
+
 class event
 {
     event()
